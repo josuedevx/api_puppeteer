@@ -22,7 +22,20 @@ app.get('/scrape', async (req, res) => {
   if (!url) return res.status(400).send('URL faltante');
 
   try {
-    const browser = await puppeteer.launch({ headless: true });
+    
+    console.log(`[INFO] Scrape solicitado para: ${url}`);
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--single-process'
+      ]
+    });
+
     const page = await browser.newPage();
 
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
@@ -30,6 +43,7 @@ app.get('/scrape', async (req, res) => {
     const html = await page.content();
     await browser.close();
 
+    console.log(`[SUCCESS] Scrape completado para: ${url}`);
     res.send(html);
   } catch (err) {
     res.status(500).send('Error: ' + err.message);
@@ -40,6 +54,6 @@ app.get("/", (_, res) => {
   res.send("puppeteer API is running.");
 });
 
-app.listen(port, () => {
-  console.log(`Puppeteer scraper corriendo en http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Puppeteer scraper corriendo en http://0.0.0.0:${port}`);
 });
