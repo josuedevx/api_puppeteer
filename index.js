@@ -6,7 +6,6 @@ const cors = require("cors");
 puppeteer.use(stealth());
 
 const app = express();
-const port = 3000;
 
 app.use(
   cors({
