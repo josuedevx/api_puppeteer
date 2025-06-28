@@ -50,10 +50,10 @@ app.get('/scrape', async (req, res) => {
   }
 });
 
-app.get("/", (_, res) => {
+app.get("/", function (req, res) {
   res.send("puppeteer API is running.");
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Puppeteer scraper corriendo en http://0.0.0.0:${port}`);
+app.listen(process.env.PORT ?? 3000, function () {
+  console.log(`Listening on port ${process.env.PORT ?? 3000}...`);
 });
